@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+    {% if category %}
+        {{category.description|truncatewords:155}}
+    {% else %}
+        Welcome to Ecom Here you can find Anything you WANT!!
+    {% endif %}
+{% endblock %}
+{% block title %}
+    {% if category %}
+        {{category.name}} E-Com
+    {% else %}
+        See our Newest Arrivals!!
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+{% if category %}
+<div>
+    <div class="row my_row_class">
+        <div class="mx-auto text-center">
+        <h2 ><a href="{% url 'shop:allprocat' %}">Our Product Collections</a></h2>
+        </div>
+    </div>
+</div>
+{% endif %}
+<div class="mx_auto">
+    {% if category %}
+    <center><img class="my_image" src="{{category.image.url}}" alt="{{category.name}}" width="1290px;" ></center>
+</div>
+<br>
+<div>
+    <h1 class="text-center my title">{{category.name}}</h1>
+    <p class="text-justify">{{category.description}}</p><br>
+</div>
+    {% else %}
+<div>
+    <img class="my_image my_image_padding " src="{% static 'img/banner.png'  %}" alt="our products" width="1290px;">
+</div>
+<br>
+<div>
+    <h1 class="text-center my_title">Our Product Collections</h1>
+    <h3 class="text-justify">A product description is the marketing copy that
+            explains what a product is and why it’s worth purchasing.
+            The purpose of a product description is to supply customers
+            with important information about the features and
+            benefits of the product so they’re compelled to buy.
+    </h3>
+</div>
+    {% endif %}
+<div class="container">
+    <div class="row mx_auto">
+        {% for product in products.object_list %}
+        <div class="my_bottom_margin col-9 col-sm-12  col-md-4 xol-lg-4">
+            <div class="card text-center" style="min-width:18rem;">
+                <a href="{{product.get_url}}">
+                    <img class="card-img-top my_image" src="{{product.image.url}}" alt="{{product.name}}" width="350px" height="350px"></a>
+            <div class="card-body">
+                <h2>{{product.name}}</h2>
+                <h3>{{product.price}}</h3>
+            </div>
+            </div>
+        </div>
+        {% endfor %}
+        <div class="mx_auto">
+            {% if products.paginator.num_pages > 1 %}
+
+            <hr>
+            <div class="text-center">
+                {% for pg in products.paginator.page_range %}
+                <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        <br>
+    </div>
+</div>
+
+{% endblock %}
